@@ -1,0 +1,41 @@
+{
+  "project": "后台任务能力票据调度",
+  "entities": [
+    "job_definition",
+    "schedule_window",
+    "job_instance",
+    "capability_ticket",
+    "execution_lease",
+    "effect_receipt",
+    "compensation"
+  ],
+  "states": [
+    "scheduled",
+    "queued",
+    "leased",
+    "running",
+    "cancelling",
+    "compensating",
+    "completed",
+    "dead_lettered"
+  ],
+  "event_types": [
+    "window.opened",
+    "instance.enqueued",
+    "ticket.issued",
+    "lease.claimed",
+    "effect.recorded",
+    "instance.cancelled",
+    "compensation.completed",
+    "instance.completed"
+  ],
+  "time_policy": "ISO 8601 with timezone",
+  "identifier_policy": "同一租户和对象类型内业务标识唯一",
+  "version_policy": "已发布规则与事实通过新版本追加，不覆盖历史",
+  "rules": [
+    "同一任务与计划窗口只能生成一个实例",
+    "票据不得跨实例转让且领取时必须复核授权版本",
+    "租约重领不得重复已确认的外部效果",
+    "存在部分效果时取消必须进入补偿链"
+  ]
+}

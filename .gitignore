@@ -1,0 +1,11 @@
+.env
+*.key
+*.pem
+.venv/
+venv/
+dist/
+build/
+coverage/
+__pycache__/
+*.py[cod]
+.DS_Store
