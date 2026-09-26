@@ -4,41 +4,71 @@
     "event_type": "window.opened",
     "aggregate_id": "case-08-001",
     "occurred_at": "2026-09-25T09:00:00+08:00",
-    "actor_id": "operator-01"
+    "actor_id": "scheduler",
+    "payload": {"job_id": "job-08", "window_key": "2026-09-25T01:00:00Z", "trigger_at": "2026-09-25T01:00:00+00:00"}
   },
   {
     "event_id": "evt-08-002",
     "event_type": "instance.enqueued",
-    "aggregate_id": "case-08-001",
-    "occurred_at": "2026-09-25T10:00:00+08:00",
-    "actor_id": "reviewer-02"
+    "aggregate_id": "inst-job-08-2026-09-25T01:00:00Z",
+    "occurred_at": "2026-09-25T09:00:01+08:00",
+    "actor_id": "scheduler",
+    "payload": {"purpose": "同步连接器清单到工作区", "revision": 3}
   },
   {
     "event_id": "evt-08-003",
     "event_type": "ticket.issued",
-    "aggregate_id": "case-08-001",
-    "occurred_at": "2026-09-25T11:00:00+08:00",
-    "actor_id": "operator-01"
+    "aggregate_id": "inst-job-08-2026-09-25T01:00:00Z",
+    "occurred_at": "2026-09-25T09:00:01+08:00",
+    "actor_id": "scheduler",
+    "payload": {"authz_version": 7, "attempt": 1}
   },
   {
     "event_id": "evt-08-004",
     "event_type": "lease.claimed",
-    "aggregate_id": "case-08-001",
-    "occurred_at": "2026-09-25T12:00:00+08:00",
-    "actor_id": "reviewer-02"
+    "aggregate_id": "inst-job-08-2026-09-25T01:00:00Z",
+    "occurred_at": "2026-09-25T09:00:05+08:00",
+    "actor_id": "executor-02",
+    "payload": {"attempt": 1, "lease_expires_at": "2026-09-25T09:05:05+08:00"}
   },
   {
     "event_id": "evt-08-005",
     "event_type": "effect.recorded",
-    "aggregate_id": "case-08-001",
-    "occurred_at": "2026-09-25T13:00:00+08:00",
-    "actor_id": "operator-01"
+    "aggregate_id": "inst-job-08-2026-09-25T01:00:00Z",
+    "occurred_at": "2026-09-25T09:01:00+08:00",
+    "actor_id": "executor-02",
+    "payload": {"idempotency_key": "report-2026-09-25", "resource": "workspace:w1/reports/daily.md"}
   },
   {
     "event_id": "evt-08-006",
-    "event_type": "instance.cancelled",
-    "aggregate_id": "case-08-001",
-    "occurred_at": "2026-09-25T14:00:00+08:00",
-    "actor_id": "reviewer-02"
+    "event_type": "cancel.requested",
+    "aggregate_id": "inst-job-08-2026-09-25T01:00:00Z",
+    "occurred_at": "2026-09-25T09:02:00+08:00",
+    "actor_id": "operator-01",
+    "payload": {"reason": "risk_quarantine", "detail": "租户进入风险隔离"}
+  },
+  {
+    "event_id": "evt-08-007",
+    "event_type": "compensation.started",
+    "aggregate_id": "inst-job-08-2026-09-25T01:00:00Z",
+    "occurred_at": "2026-09-25T09:02:01+08:00",
+    "actor_id": "scheduler",
+    "payload": {"pending_effect_ids": ["effect-0001"]}
+  },
+  {
+    "event_id": "evt-08-008",
+    "event_type": "compensation.step.recorded",
+    "aggregate_id": "inst-job-08-2026-09-25T01:00:00Z",
+    "occurred_at": "2026-09-25T09:03:00+08:00",
+    "actor_id": "operator-01",
+    "payload": {"effect_id": "effect-0001", "action": "file.delete", "note": "删除已生成报表"}
+  },
+  {
+    "event_id": "evt-08-009",
+    "event_type": "compensation.completed",
+    "aggregate_id": "inst-job-08-2026-09-25T01:00:00Z",
+    "occurred_at": "2026-09-25T09:03:01+08:00",
+    "actor_id": "scheduler",
+    "payload": {}
   }
 ]

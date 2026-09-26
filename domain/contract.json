@@ -17,25 +17,44 @@
     "cancelling",
     "compensating",
     "completed",
+    "cancelled",
+    "compensated",
     "dead_lettered"
   ],
   "event_types": [
+    "job.defined",
+    "job.updated",
     "window.opened",
     "instance.enqueued",
     "ticket.issued",
+    "ticket.issue_denied",
     "lease.claimed",
+    "lease.reclaimed",
+    "lease.heartbeat",
     "effect.recorded",
+    "cancel.requested",
     "instance.cancelled",
+    "compensation.started",
+    "compensation.step.recorded",
     "compensation.completed",
-    "instance.completed"
+    "instance.completed",
+    "instance.dead_lettered",
+    "instance.requeued"
   ],
   "time_policy": "ISO 8601 with timezone",
-  "identifier_policy": "同一租户和对象类型内业务标识唯一",
-  "version_policy": "已发布规则与事实通过新版本追加，不覆盖历史",
+  "identifier_policy": "同一租户和对象类型内业务标识唯一；实例ID=任务ID+计划窗口键",
+  "version_policy": "已发布规则与事实通过新版本追加，不覆盖历史；任务定义按 revision、授权按 authz_version 追加",
   "rules": [
     "同一任务与计划窗口只能生成一个实例",
     "票据不得跨实例转让且领取时必须复核授权版本",
     "租约重领不得重复已确认的外部效果",
     "存在部分效果时取消必须进入补偿链"
-  ]
+  ],
+  "notes": {
+    "ticket": "入队时按当前授权版本签发 HMAC 签名的短期票据，钉住实例；领取与心跳复核授权收缩、租户停用和风险隔离",
+    "calendar": "cron + IANA 时区；春跳 gap 可选取跳变前/后，秋叠固定取第一次出现；错过触发策略为 skip/catch_up/catch_up_latest",
+    "lease": "领取发放带超时的租约；超时后原子重领，旧租约立即失效；外部效果以幂等键登记",
+    "recovery": "事件日志只追加，重放恢复窗口、未决租约、死信、补偿进度与下一触发点；末尾半截写损坏行隔离到 .quarantine",
+    "audit": "每个实例保留完整事件轨迹，可查询运行目的、所用能力、外部效果、补偿步骤与完成情况"
+  }
 }
