@@ -1,7 +1,7 @@
 [project]
 name = "ccusr-job-capability"
 version = "0.1.0"
-description = "后台任务定义、能力票据、租约执行、补偿与恢复的领域资料"
+description = "后台任务能力票据调度服务：短期票据、租约世代、夏令时调度、补偿与恢复"
 requires-python = ">=3.11"
 dependencies = []
 

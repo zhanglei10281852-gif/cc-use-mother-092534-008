@@ -17,25 +17,45 @@
     "cancelling",
     "compensating",
     "completed",
+    "cancelled",
     "dead_lettered"
   ],
   "event_types": [
+    "job.version_published",
     "window.opened",
+    "window.suppressed",
     "instance.enqueued",
     "ticket.issued",
+    "ticket.denied",
+    "ticket.revoked",
     "lease.claimed",
+    "lease.heartbeat",
+    "lease.expired",
     "effect.recorded",
+    "instance.cancel_requested",
     "instance.cancelled",
+    "instance.dead_lettered",
+    "instance.reopened",
+    "compensation.scheduled",
     "compensation.completed",
-    "instance.completed"
+    "compensation.failed",
+    "compensation.retry",
+    "instance.completed",
+    "authorization.revised"
   ],
   "time_policy": "ISO 8601 with timezone",
   "identifier_policy": "同一租户和对象类型内业务标识唯一",
   "version_policy": "已发布规则与事实通过新版本追加，不覆盖历史",
   "rules": [
-    "同一任务与计划窗口只能生成一个实例",
-    "票据不得跨实例转让且领取时必须复核授权版本",
-    "租约重领不得重复已确认的外部效果",
-    "存在部分效果时取消必须进入补偿链"
+    "同一任务与计划窗口只能生成一个实例，窗口键以计划时区解析后的 UTC 触发瞬间为准",
+    "夏令时缺口按任务定义选择前移或跳过，秋令时重叠明确选择早次或晚次触发，解析后的同一 UTC 瞬间只生成一个窗口",
+    "错过触发按 none、scheduled、backfill 三种补跑策略处理，backfill 受补跑上限约束",
+    "每次入队按当前授权签发不可跨实例转让的短期能力票据，票据记录授权版本与授权范围指纹",
+    "执行器领取时必须复核票据有效期、授权版本、任务定义版本、租户状态，任一不满足则未生效实例直接取消",
+    "租约以世代号隔离，超时后旧执行者的心跳与副作用提交必须被世代号挡下，同一副作用键只确认一次",
+    "授权收缩、租户停用或风险隔离后，尚未产生外部效果的实例立即取消，已产生部分效果的实例进入补偿链",
+    "补偿全部成功方可终结为已取消，补偿耗尽重试仍失败的实例进入死信，死信可经审计后重新发起补偿",
+    "值班员可查询实例运行目的、计划窗口、票据能力、实际效果、补偿结果与完整事件时间线",
+    "调度器重启后必须恢复未决租约、到期票据、死信状态与下一触发点"
   ]
 }
